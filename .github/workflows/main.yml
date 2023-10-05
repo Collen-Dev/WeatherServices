@@ -18,11 +18,11 @@ jobs:
           dotnet-version: '6.0.x'
       
       - name: Restore
-        run: dotnet restore ./project.sln
+        run: dotnet restore ./WeatherService.sln
 
       - name: Build
-        run: dotnet build ./project.sln --configuration Release --no-restore
+        run: dotnet build ./WeatherService.sln --configuration Release --no-restore
 
       - name: Publish
-        run: dotnet publish ./project.sln --configuration Release --no-build
+        run: dotnet publish ./WeatherService.sln --configuration Release --no-build
         
