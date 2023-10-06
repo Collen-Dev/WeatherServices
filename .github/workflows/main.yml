@@ -30,7 +30,7 @@ jobs:
         run: dotnet build ${{ENV.PROJECT_SOLUTION}} --configuration Release --no-restore
 
       - name: Publish
-        run: dotnet publish ${{ENV.PROJECT_SOLUTION}} --configuration Release -- --output "${{env.AZURE_WEBAPP_PACAKGE_PATH}}"
+        run: dotnet publish ${{ENV.PROJECT_SOLUTION}} --configuration Release --no build --output "${{env.AZURE_WEBAPP_PACAKGE_PATH}}"
   
       - name: Deployment
         uses: azure/webapps-deploy@v2
