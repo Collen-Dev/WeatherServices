@@ -8,6 +8,8 @@ on:
 env:
     AZURE_WEBAPP_NAME: 'app-collen-dev-land'
     AZURE_WEBAPP_PACAKGE_PATH: 'https://app-collen-dev-land.azurewebsites.net/'
+    DOTNET_VERSION: '7.0.x'
+    PROJECT_SOLUTION: './WeatherService/WeatherService.sln'
 
 jobs:
   publish:
@@ -19,16 +21,16 @@ jobs:
       - name: Setup .Net
         uses: actions/setup-dotnet@v3
         with: 
-          dotnet-version: '6.0.x'
+          dotnet-version: ${{env.DOTNET_VERSION}}
       
       - name: Restore
-        run: dotnet restore ./WeatherService/WeatherService.sln
+        run: dotnet restore ${{ENV.PROJECT_SOLUTION}}
 
       - name: Build
-        run: dotnet build ./WeatherService/WeatherService.sln --configuration Release --no-restore
+        run: dotnet build ${{ENV.PROJECT_SOLUTION}} --configuration Release --no-restore
 
       - name: Publish
-        run: dotnet publish ./WeatherService/WeatherService.sln --configuration Release --output "${{env.AZURE_WEBAPP_PACAKGE_PATH}}"
+        run: dotnet publish ${{ENV.PROJECT_SOLUTION}} --configuration Release -- --output "${{env.AZURE_WEBAPP_PACAKGE_PATH}}"
   
       - name: Deployment
         uses: azure/webapps-deploy@v2
