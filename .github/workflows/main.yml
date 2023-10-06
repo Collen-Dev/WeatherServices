@@ -7,7 +7,7 @@ on:
       
 env:
     AZURE_WEBAPP_NAME: 'app-collen-dev-land'
-    AZURE_WEBAPP_PACAKGE_PATH: $'https://{{env.AZURE_WEBAPP_NAME}}.azurewebsites.net/'
+    AZURE_WEBAPP_PACAKGE_PATH: 'https://${{env.AZURE_WEBAPP_NAME}}.azurewebsites.net/'
     DOTNET_VERSION: '7.0.x'
     PROJECT_SOLUTION: './WeatherService/WeatherService.sln'
 
