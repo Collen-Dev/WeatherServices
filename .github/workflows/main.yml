@@ -7,7 +7,7 @@ on:
       
     env:
      AZURE_WEBAPP_NAME: 'app-collen-dev-land'
-     AZURE_WEBAPP_PACAKGE_PATH: './WeatherService/'
+     AZURE_WEBAPP_PACAKGE_PATH: './WeatherService'
 
 jobs:
   publish:
@@ -28,7 +28,7 @@ jobs:
         run: dotnet build ./WeatherService/WeatherService.sln --configuration Release --no-restore
 
       - name: Publish
-        run: dotnet publish ./WeatherService/WeatherService.sln --configuration Release
+        run: dotnet publish ./WeatherService/WeatherService.sln --configuration Release --output "${{env.AZURE_WEBAPP_PACAKGE_PATH}}"
   
       - name: Deployment
         uses: azure/webapps-deploy@v2
@@ -37,6 +37,4 @@ jobs:
          publish-profile: ${{secrets.AZURE_PUBLISH_PROFILE}}
          package: "${{env.AZURE_WEBAPP_PACAKGE_PATH}}"
          
-      - task: PublishBuildArtifacts@1
-
         
