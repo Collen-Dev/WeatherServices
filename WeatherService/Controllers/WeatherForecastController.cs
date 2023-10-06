@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
+using WeatherService.Contracts;
 
 namespace WeatherService.Controllers
 {

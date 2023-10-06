@@ -1,4 +1,4 @@
-namespace WeatherService
+namespace WeatherService.Contracts
 {
     public class WeatherForecast
     {
