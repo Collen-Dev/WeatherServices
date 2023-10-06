@@ -7,7 +7,7 @@ on:
       
     env:
      AZURE_WEBAPP_NAME: 'Weather Services API'
-     AZURE_WEBAPP_PACAKGE_PATH: './publish'
+     AZURE_WEBAPP_PACAKGE_PATH: './WeatherService'
 
 jobs:
   publish:
