@@ -4,6 +4,10 @@ on:
   push:
     branches:
       - main
+      
+    env:
+     AZURE_WEBAPP_NAME: 'Weather Services API'
+     AZURE_WEBAPP_PACAKGE_PATH: './publish'
 
 jobs:
   publish:
@@ -18,11 +22,18 @@ jobs:
           dotnet-version: '6.0.x'
       
       - name: Restore
-        run: dotnet restore ${{secret.AZURE_PUBLISH_PROFILE}}
+        run: dotnet restore ./WeatherService/WeatherService.sln
 
       - name: Build
-        run: dotnet build ${{secret.AZURE_PUBLISH_PROFILE}} --configuration Release --no-restore
+        run: dotnet build ./WeatherService/WeatherService.sln --configuration Release --no-restore
 
       - name: Publish
-        run: dotnet publish ${{secret.AZURE_PUBLISH_PROFILE}} --configuration Release --no-build
+        run: dotnet publish ./WeatherService/WeatherService.sln --configuration Release --no-build --output '${{env.AZURE_WEBAPP_PACAKGE_PATH}}'
+  
+      - name: Deployment
+        uses: actions/webapps@v2
+        with:
+         app-name: ${{env.AZURE_WEBAPP_NAME}}
+         publish-profile: ${{secrets.AZURE_PUBLISH_PROFILE}}
+         package: ${{env.AZURE_WEBAPP_PACAKGE_PATH}}
         
