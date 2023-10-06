@@ -1,6 +1,7 @@
 # ignore ALL .log files
 *.log
-
+# ignore yaml file
+*.yml
 # ignore ALL files in ANY directory named temp
 temp/
 bin/
