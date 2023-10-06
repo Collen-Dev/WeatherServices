@@ -28,7 +28,7 @@ jobs:
         run: dotnet build ./WeatherService/WeatherService.sln --configuration Release --no-restore
 
       - name: Publish
-        run: dotnet publish ./WeatherService/WeatherService.sln --configuration Release --no-build --output '${{env.AZURE_WEBAPP_PACAKGE_PATH}}'
+        run: dotnet publish ./WeatherService/WeatherService.sln --configuration Release --no-build --output "${{env.AZURE_WEBAPP_PACAKGE_PATH}}"
   
       - name: Deployment
         uses: actions/webapps-deploy@v2
