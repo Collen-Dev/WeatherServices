@@ -1,6 +1,6 @@
 ﻿namespace WeatherService.Interfaces
 {
-    public interface IWeatherLookupHelper
+    public interface IWeatherForecastHelper
     {
         Task<HttpResponseMessage> GetWeatherFocastByCity(string city);
     }

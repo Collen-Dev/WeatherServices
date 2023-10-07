@@ -2,10 +2,10 @@
 
 namespace WeatherService.Helpers
 {
-    public class WeatherLookupHelper : IWeatherLookupHelper
+    public class WeatherForecastHelper : IWeatherForecastHelper
     {
-        private readonly IWeatherService _weatherService;
-        public WeatherLookupHelper(IWeatherService weatherService) 
+        private readonly IWeatherForecastService _weatherService;
+        public WeatherForecastHelper(IWeatherForecastService weatherService) 
         {
             _weatherService = weatherService;
         }

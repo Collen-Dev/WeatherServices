@@ -1,6 +1,8 @@
 using Microsoft.Extensions.DependencyInjection;
+using WeatherService.Extensions;
 using WeatherService.Helpers;
 using WeatherService.Interfaces;
+using WeatherService.Services;
 using WeatherService.Settings;
 
 namespace WeatherServices
@@ -13,13 +15,13 @@ namespace WeatherServices
 
             IConfiguration weatherServiceConfig = builder.Configuration;
             var weatherService = new ServiceOptions();
-            weatherServiceConfig.Bind(weatherService);
+            weatherServiceConfig.GetSection("Services:WeatherService").Bind(weatherService);
             builder.Services.Configure<ServiceOptions>(weatherServiceConfig);
 
-            builder.Services.AddSingleton<HttpClient>();
-            builder.Services.AddSingleton<ISharedhelper, Sharedhelper>();
-            builder.Services.AddSingleton<IWeatherLookupHelper, WeatherLookupHelper>();
-            builder.Services.AddSingleton<IWeatherService, WeatherService.Services.WeatherService>();
+            builder.Services.AddSingleton<HttpClient>()
+            .AddSingleton<ISharedhelper, Sharedhelper>()
+            .AddSingleton<IWeatherForecastHelper, WeatherForecastHelper>()
+            .AddRestServices<IWeatherForecastService, WeatherForecastService>(builder.Configuration, "Services:WeatherService");
 
             // Add services to the container.
 
