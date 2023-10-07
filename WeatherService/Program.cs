@@ -1,7 +1,8 @@
-using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Caching.Memory;
 using WeatherService.Extensions;
 using WeatherService.Helpers;
 using WeatherService.Interfaces;
+using WeatherService.Providers;
 using WeatherService.Services;
 using WeatherService.Settings;
 
@@ -13,15 +14,17 @@ namespace WeatherServices
         {
             var builder = WebApplication.CreateBuilder(args);
 
-            IConfiguration weatherServiceConfig = builder.Configuration;
-            var weatherService = new ServiceOptions();
-            weatherServiceConfig.GetSection("Services:WeatherService").Bind(weatherService);
-            builder.Services.Configure<ServiceOptions>(weatherServiceConfig);
+            var uriOptions = new UriOptions();
+            var uriSection = builder.Configuration.GetSection("URIs");
+            uriSection.Bind(uriOptions);
+            builder.Services.Configure<UriOptions>(uriSection);
 
             builder.Services.AddSingleton<HttpClient>()
-            .AddSingleton<ISharedhelper, Sharedhelper>()
-            .AddSingleton<IWeatherForecastHelper, WeatherForecastHelper>()
-            .AddRestServices<IWeatherForecastService, WeatherForecastService>(builder.Configuration, "Services:WeatherService");
+                .AddMemoryCache()
+                .AddSingleton<ISharedhelper, Sharedhelper>()
+                .AddSingleton<IWeatherForecastHelper, WeatherForecastHelper>()
+                .AddSingleton<IAzureSecretProvider, AzureSecretProvider>()
+                .AddRestServices<IWeatherForecastService, WeatherForecastService>(builder.Configuration, "Services:WeatherService");
 
             // Add services to the container.
 
@@ -29,10 +32,27 @@ namespace WeatherServices
 
             builder.Services.AddSwaggerGen();
 
+            builder.WebHost.ConfigureKestrel(options =>
+            {
+                options.AddServerHeader = false;
+            });
+
+            builder.Services.AddHealthChecks();
+
             var app = builder.Build();           
 
             app.UseSwagger();
             app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json","API V1"));
+
+            app.UseHealthChecks("/health");
+
+            if(!app.Environment.IsDevelopment())
+            {
+                app.UseHsts();
+
+                // TODO: use a middle ware to implement this
+                //app.UseSecurityHeader()
+            }
 
             // Configure the HTTP request pipeline.
 
