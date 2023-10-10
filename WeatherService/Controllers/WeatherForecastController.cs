@@ -1,6 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
 using WeatherService.Contracts;
-using WeatherService.Helpers;
 using WeatherService.Interfaces;
 
 namespace WeatherService.Controllers
