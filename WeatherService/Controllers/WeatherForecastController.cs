@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using WeatherService.Contracts;
 using WeatherService.Interfaces;
@@ -22,6 +23,7 @@ namespace WeatherService.Controllers
         }
 
         [HttpGet("By-city-name")]
+        [Authorize(Roles = "Api.Read.All")]
         public async Task<IActionResult> Get(string city)
         {
             _logger.LogDebug("Search Weather by City.");
