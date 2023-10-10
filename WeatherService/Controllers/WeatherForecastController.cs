@@ -1,29 +1,25 @@
 using Microsoft.AspNetCore.Mvc;
 using WeatherService.Contracts;
+using WeatherService.Helpers;
 using WeatherService.Interfaces;
 
 namespace WeatherService.Controllers
 {
     [ApiController]
     [Route("[controller]")]
-    public class LookupWeatherController : ControllerBase
+    public class WeatherForecastController : ControllerBase
     {
-        private static readonly string[] Summaries = new[]
-        {
-        "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
-        };
+        private readonly IWeatherForecastHelper _weatherForecastHelper;
+        private readonly ILogger<WeatherForecastController> _logger;
+        private readonly ISharedhelper _sharedHelper;
 
-        private readonly IWeatherForecastHelper _weatherLookupHelper;
-        private readonly ILogger<LookupWeatherController> _logger;
-        private readonly ISharedhelper _sharedhelper;
-
-        public LookupWeatherController(ILogger<LookupWeatherController> logger, 
-            IWeatherForecastHelper weatherLookupHelper,
-            ISharedhelper sharedhelper)
+        public WeatherForecastController(ILogger<WeatherForecastController> logger, 
+            IWeatherForecastHelper weatherForecastHelper,
+            ISharedhelper sharedHelper)
         {
             _logger = logger;
-            _weatherLookupHelper = weatherLookupHelper;
-            _sharedhelper = sharedhelper;
+            _weatherForecastHelper = weatherForecastHelper;
+            _sharedHelper = sharedHelper;
         }
 
         [HttpGet("By-city-name")]
@@ -32,23 +28,23 @@ namespace WeatherService.Controllers
             _logger.LogDebug("Search Weather by City.");
 
             // integrate with weather service API
-            var result = await _weatherLookupHelper.GetWeatherFocastByCity(city);
+            var result = await _weatherForecastHelper.GetWeatherFocastByCity(city);
 
             try
             {
                 if (!result.IsSuccessStatusCode)
                 {
                     _logger.LogError($"Service returned error. Code: {result.StatusCode}, Message: {await result.Content.ReadAsStringAsync()}");
-                    return new ObjectResult(_sharedhelper.ValidateAndHandleResponse<WeatherSearchError>(await result.Content.ReadAsStringAsync()));
+                    return new ObjectResult(_sharedHelper.ValidateAndHandleResponse<WeatherSearchError>(await result.Content.ReadAsStringAsync()));
                 }
             }
             catch(Exception e)
             {
-                _logger.LogCritical($"Critical error occured. {e}");
+                _logger.LogCritical($"Critical error. {e}");
                 throw;
             }
 
-            return Ok(_sharedhelper.ValidateAndHandleResponse<WeatherFocastDetail>(await result.Content.ReadAsStringAsync()));
+            return Ok(_sharedHelper.ValidateAndHandleResponse<WeatherFocastDetail>(await result.Content.ReadAsStringAsync()));
         }
     }
 }
