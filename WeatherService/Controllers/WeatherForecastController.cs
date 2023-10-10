@@ -22,10 +22,10 @@ namespace WeatherService.Controllers
             _sharedHelper = sharedHelper;
         }
 
-        [HttpGet("By-city-name")]
-        [Authorize(Roles = "Api.Read.All")]
+        [HttpGet("By-city-name")]        
         public async Task<IActionResult> Get(string city)
         {
+
             _logger.LogDebug("Search Weather by City.");
 
             // integrate with weather service API
