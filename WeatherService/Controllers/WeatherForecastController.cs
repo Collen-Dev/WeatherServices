@@ -29,6 +29,7 @@ namespace WeatherService.Controllers
             _logger.LogDebug("Search Weather by City.");
 
             // TODO: Remove this
+            // Test
             return new JsonResult(new { Temp = "Celsius", Low = "10", High = "30" });
 
             // integrate with weather service API
