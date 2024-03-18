@@ -1,42 +1,62 @@
-name: C_&_T_BS_Deployment
+
+name: "Build and Deploy - Self Hosted"
+
 on:
   workflow_dispatch:
-  push:
     branches:
       - main
-      
+
 env:
-    AZURE_WEBAPP_NAME: 'app-collen-dev-land'
-    AZURE_WEBAPP_PACAKGE_PATH: "https://app-collen-dev-land.azurewebsites.net/"
-    DOTNET_VERSION: '7.0.x'
-    PROJECT_SOLUTION: './WeatherService/WeatherService.sln'
+  GITHUB_WORKING_DIRECTORY: 'WeatherService'             # If you have a root folder in the GitHub code set otherwise leave it blank
+  IIS_WEBAPP_PATH: 'C:\inetpub\wwwroot\WeatherAPI'   # Web App Path from Virtual Machine         
+  DOTNET_VERSION: '7.0.x'           # set this to the dot net version to use
 
 jobs:
-  publish:
-    runs-on: ubuntu-latest
+  build:
+    runs-on: self-hosted 
 
     steps:
-      - uses: actions/checkout@v3
-      
-      - name: Setup .Net (Prerequisites)
-        uses: actions/setup-dotnet@v3
-        with: 
-          dotnet-version: ${{env.DOTNET_VERSION}}
-      
-      - name: Restore 
-        run: dotnet restore ${{env.PROJECT_SOLUTION}}
+      - uses: actions/checkout@v2
 
-      - name: Build Project Solution
-        run: dotnet build ${{env.PROJECT_SOLUTION}} --configuration Release --no-restore
-
-      - name: Publish Artifact
-        run: dotnet publish ${{env.PROJECT_SOLUTION}} --configuration Release --no-build --output "${{env.AZURE_WEBAPP_PACAKGE_PATH}}"
-  
-      - name: Deployment to Azure App Service
-        uses: azure/webapps-deploy@v2
+      - name: Setup .NET Core 
+        uses: actions/setup-dotnet@v1
         with:
-         app-name: ${{env.AZURE_WEBAPP_NAME}}
-         publish-profile: ${{secrets.AZURE_PUBLISH_PROFILE}}
-         package: "${{env.AZURE_WEBAPP_PACAKGE_PATH}}"
+          dotnet-version: ${{ env.DOTNET_VERSION }}
 
-        
+      - name: Install dependencies
+        working-directory: ${{ env.GITHUB_WORKING_DIRECTORY }}
+        run: dotnet restore
+
+      - name: Build
+        working-directory: ${{ env.GITHUB_WORKING_DIRECTORY }}
+        run: dotnet build --configuration Release --no-restore 
+
+      - name: Publish
+        working-directory: ${{ env.GITHUB_WORKING_DIRECTORY }}
+        run: dotnet publish --configuration Release --output 'dotnetcorewebapp'
+
+      - name: Upload a Build Artifact
+        uses: actions/upload-artifact@v2.2.1
+        with:
+          name: application
+          path: '${{ env.GITHUB_WORKING_DIRECTORY }}/dotnetcorewebapp'
+
+  deploy:
+    needs: build
+    runs-on: self-hosted
+
+    steps:
+    - name: Take application offline
+      run: New-Item -Type File -Name app_offline.htm -Path ${{ env.IIS_WEBAPP_PATH }} -Force
+
+    - name: Set Offline HTML file
+      run: Set-Content ${{ env.IIS_WEBAPP_PATH }}\app_offline.htm 'Site Under Maintenance'
+
+    - name: Download new binaries over the top of the app
+      uses: actions/download-artifact@v2
+      with:
+        name: application
+        path: ${{ env.IIS_WEBAPP_PATH }}
+
+    - name: Bring the app back online
+      run: Remove-Item ${{ env.IIS_WEBAPP_PATH }}\app_offline.htm
