@@ -33,6 +33,7 @@ jobs:
         run: dotnet publish ${{env.PROJECT_SOLUTION}} --configuration Release --no-build --output "${{env.APP_NAME_ARTIFACTS_PATH}}"
 
   Deployment:
+    needs: Preparation
     runs-on: windows-latest
 
     steps:      
