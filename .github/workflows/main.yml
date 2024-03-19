@@ -29,16 +29,13 @@ jobs:
       - name: Build Project Solution
         run: dotnet build ${{env.PROJECT_SOLUTION}} --configuration Release --no-restore
 
+      - name: Publish Artifact
+        run: dotnet publish ${{env.PROJECT_SOLUTION}} --configuration Release --no-build --output "${{env.APP_NAME_ARTIFACTS_PATH}}"
+
   Deployment:
     runs-on: windows-latest
 
     steps:      
-      - name: Download artifacts
-        uses: actions/download-artifact@v4
-        with:
-          name: ${{env.APP_NAME_ARTIFACTS}}
-          path: ${{env.APP_NAME_ARTIFACTS_PATH}}  # Adjust the path where artifacts will be downloaded
-
       - name: Copy artifacts to IIS directory
         run: |
           robocopy ${{env.APP_NAME_ARTIFACTS_PATH}} ${{env.IIS_WEBAPP_PACAKGE_PATH}} /E /Z
