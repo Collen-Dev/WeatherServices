@@ -3,18 +3,17 @@ name: "Build and Deploy - Self Hosted"
 
 on:
   workflow_dispatch:
-  push:
     branches:
       - main
 
 env:
-  GITHUB_WORKING_DIRECTORY: ''             # If you have a root folder in the GitHub code set otherwise leave it blank
+  GITHUB_WORKING_DIRECTORY: 'WeatherService'             # If you have a root folder in the GitHub code set otherwise leave it blank
   IIS_WEBAPP_PATH: 'C:\inetpub\wwwroot\WeatherAPI'   # Web App Path from Virtual Machine         
   DOTNET_VERSION: '7.0.x'           # set this to the dot net version to use
 
 jobs:
   build:
-    runs-on: self-hosted 
+    runs-on: ubuntu-latest 
 
     steps:
       - uses: actions/checkout@v2
@@ -44,7 +43,7 @@ jobs:
 
   deploy:
     needs: build
-    runs-on: self-hosted
+    runs-on: ubuntu-latest
 
     steps:
     - name: Take application offline
