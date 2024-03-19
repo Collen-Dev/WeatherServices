@@ -9,6 +9,7 @@ env:
     DOTNET_VERSION: '7.0.x'
     PROJECT_SOLUTION: './WeatherService/WeatherService.sln'
     APP_NAME_ARTIFACTS: 'Weather Service - Artifacts'
+    APP_NAME_ARTIFACTS_PATH: 'C:\Temp\WeatherService-Artifacts'
 
 jobs:
   Preparation:
@@ -36,11 +37,11 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: ${{env.APP_NAME_ARTIFACTS}}
-          path: ${{env.APP_NAME_ARTIFACTS}}  # Adjust the path where artifacts will be downloaded
+          path: ${{env.APP_NAME_ARTIFACTS_PATH}}  # Adjust the path where artifacts will be downloaded
 
       - name: Copy artifacts to IIS directory
         run: |
-          robocopy ${{env.APP_NAME_ARTIFACTS}} ${{env.IIS_WEBAPP_PACAKGE_PATH}} /E /Z
+          robocopy ${{env.APP_NAME_ARTIFACTS_PATH}} ${{env.IIS_WEBAPP_PACAKGE_PATH}} /E /Z
 
       - name: Restart IIS
         run: iisreset /restart
