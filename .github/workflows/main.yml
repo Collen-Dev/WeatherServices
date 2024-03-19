@@ -3,11 +3,12 @@ name: "Build and Deploy - Self Hosted"
 
 on:
   workflow_dispatch:
+  push:
     branches:
       - main
 
 env:
-  GITHUB_WORKING_DIRECTORY: 'WeatherService'             # If you have a root folder in the GitHub code set otherwise leave it blank
+  GITHUB_WORKING_DIRECTORY: ''             # If you have a root folder in the GitHub code set otherwise leave it blank
   IIS_WEBAPP_PATH: 'C:\inetpub\wwwroot\WeatherAPI'   # Web App Path from Virtual Machine         
   DOTNET_VERSION: '7.0.x'           # set this to the dot net version to use
 
@@ -16,10 +17,10 @@ jobs:
     runs-on: ubuntu-latest 
 
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4.1.1
 
       - name: Setup .NET Core 
-        uses: actions/setup-dotnet@v1
+        uses: actions/setup-dotnet@v3
         with:
           dotnet-version: ${{ env.DOTNET_VERSION }}
 
@@ -47,7 +48,7 @@ jobs:
 
     steps:
     - name: Download new binaries over the top of the app
-      uses: actions/download-artifact@v2
+      uses: actions/download-artifact@v4
       with:
         name: application
         path: ${{ env.IIS_WEBAPP_PATH }}
