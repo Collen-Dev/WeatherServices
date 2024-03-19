@@ -9,7 +9,7 @@ env:
     DOTNET_VERSION: '7.0.x'
     PROJECT_SOLUTION: './WeatherService/WeatherService.sln'
     APP_NAME_ARTIFACTS: 'Weather Service - Artifacts'
-    APP_NAME_ARTIFACTS_PATH: 'C:\Temp\WeatherService-Artifacts'
+    APP_NAME_ARTIFACTS_PATH: ''
 
 jobs:
   Preparation:
