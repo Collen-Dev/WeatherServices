@@ -1,53 +1,48 @@
-
-name: "Build and Deploy - Self Hosted"
-
+name: C_&_T_BS_Deployment (Local IIS)
 on:
-  workflow_dispatch:
+  push:
     branches:
       - main
-
+      
 env:
-  GITHUB_WORKING_DIRECTORY: 'WeatherService'             # If you have a root folder in the GitHub code set otherwise leave it blank
-  IIS_WEBAPP_PATH: 'C:\inetpub\wwwroot\WeatherAPI'   # Web App Path from Virtual Machine         
-  DOTNET_VERSION: '7.0.x'           # set this to the dot net version to use
+    IIS_WEBAPP_PACAKGE_PATH: 'C:\inetpub\wwwroot\WeatherAPI'
+    DOTNET_VERSION: '7.0.x'
+    PROJECT_SOLUTION: './WeatherService/WeatherService.sln'
+    APP_NAME_ARTIFACTS: 'Weather Service - Artifacts'
+    APP_NAME_ARTIFACTS_PATH: 'C:\Temp\WeatherService-Artifacts'
 
 jobs:
-  build:
-    runs-on: ubuntu-latest 
-
-    steps:
-      - uses: actions/checkout@v2
-
-      - name: Setup .NET Core 
-        uses: actions/setup-dotnet@v1
-        with:
-          dotnet-version: ${{ env.DOTNET_VERSION }}
-
-      - name: Install dependencies
-        working-directory: ${{ env.GITHUB_WORKING_DIRECTORY }}
-        run: dotnet restore
-
-      - name: Build
-        working-directory: ${{ env.GITHUB_WORKING_DIRECTORY }}
-        run: dotnet build --configuration Release --no-restore 
-
-      - name: Publish
-        working-directory: ${{ env.GITHUB_WORKING_DIRECTORY }}
-        run: dotnet publish --configuration Release --output 'dotnetcorewebapp'
-
-      - name: Upload a Build Artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: application
-          path: '${{ env.GITHUB_WORKING_DIRECTORY }}/dotnetcorewebapp'
-
-  deploy:
-    needs: build
+  Preparation:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Download new binaries over the top of the app
-      uses: actions/download-artifact@v2
-      with:
-        name: application
-        path: ${{ env.IIS_WEBAPP_PATH }}
+      - uses: actions/checkout@v3
+      
+      - name: Setup .Net (Prerequisites)
+        uses: actions/setup-dotnet@v3
+        with: 
+          dotnet-version: ${{env.DOTNET_VERSION}}
+      
+      - name: Restore 
+        run: dotnet restore ${{env.PROJECT_SOLUTION}}
+
+      - name: Build Project Solution
+        run: dotnet build ${{env.PROJECT_SOLUTION}} --configuration Release --no-restore
+
+  Deployment:
+    runs-on: windows-latest
+
+    steps:      
+      - name: Download artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: ${{env.APP_NAME_ARTIFACTS}}
+          path: ${{env.APP_NAME_ARTIFACTS_PATH}}  # Adjust the path where artifacts will be downloaded
+
+      - name: Copy artifacts to IIS directory
+        run: |
+          robocopy ${{env.APP_NAME_ARTIFACTS_PATH}} ${{env.IIS_WEBAPP_PACAKGE_PATH}} /E /Z
+
+      - name: Restart IIS
+        run: iisreset /restart
+        
