@@ -1,0 +1,26 @@
+name: Deploy to IIS
+
+on:
+  push:
+    branches:
+      - main  # Modify this if your main branch has a different name
+
+jobs:
+  deploy:
+    runs-on: windows-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Setup MSBuild path
+        uses: microsoft/setup-msbuild@v1.0.0
+
+      - name: Build and publish
+        run: dotnet publish -c Release -o ./publish
+
+      - name: Deploy to IIS
+        uses: warrenbuckley/Deploy-IIS-App@v1.0.4
+        with:
+          Path: ./publish
+          WebsiteName: WeatherAPI  # Replace with the name of your IIS website
