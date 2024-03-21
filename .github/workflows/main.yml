@@ -29,7 +29,7 @@ jobs:
         run: dotnet build ${{env.PROJECT_SOLUTION}} --configuration Release --no-restore
 
       - name: Publish Artifact
-        run: dotnet publish ${{env.PROJECT_SOLUTION}} --configuration Release --no-build --output "${{env.AZURE_WEBAPP_PACAKGE_PATH}}"
+        run: dotnet publish ${{env.PROJECT_SOLUTION}} --configuration Release --no-build
   
       - name: Push files
         uses: SamKirkland/FTP-Deploy-Action@v4.3.4
