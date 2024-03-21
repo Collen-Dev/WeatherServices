@@ -29,7 +29,7 @@ jobs:
         run: dotnet build ${{env.PROJECT_SOLUTION}} --configuration Release --no-restore
 
       - name: Publish Artifact
-        run: dotnet publish -c Release --output ./Release
+        run: dotnet publish ${{env.PROJECT_SOLUTION}} --configuration Release --no-build --output ./Release
   
       - name: Push files
         uses: SamKirkland/FTP-Deploy-Action@3.1.1
