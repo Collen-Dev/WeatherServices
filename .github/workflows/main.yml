@@ -1,32 +1,39 @@
-name: Deploy to IIS
-
+name: C_&_T_BS_Deployment(To IIS)
 on:
   push:
     branches:
-      - main  # Adjust this to match your repository's default branch
+      - main
+      
+env:
+    FTP_SERVER: 'ftp://192.168.1.102'
+    DOTNET_VERSION: '7.0.x'
+    PROJECT_SOLUTION: './WeatherService/WeatherService.sln'
 
 jobs:
-  deploy:
-    runs-on: windows-latest
+  publish:
+    runs-on: ubuntu-latest
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
+      
+      - name: Setup .Net (Prerequisites)
+        uses: actions/setup-dotnet@v3
+        with: 
+          dotnet-version: ${{env.DOTNET_VERSION}}
+      
+      - name: Restore 
+        run: dotnet restore ${{env.PROJECT_SOLUTION}}
 
-      - name: Download artifacts
-        uses: actions/download-artifact@v2
+      - name: Build solution
+        run: dotnet build ${{env.PROJECT_SOLUTION}} --configuration Release --no-restore
+
+      - name: Publish Artifact
+        run: dotnet publish ${{env.PROJECT_SOLUTION}} --configuration Release --no-build --output "${{env.AZURE_WEBAPP_PACAKGE_PATH}}"
+  
+      - name: Push files
+        uses: SamKirkland/FTP-Deploy-Action@v4.3.4
         with:
-          name: your-artifact-name
-          path: C:\Temp\WeatherService-Artifacts  # Adjust the path where artifacts will be downloaded
-
-      - name: Copy artifacts to IIS directory
-        shell: pwsh
-        run: |
-          $source = "C:\Temp\WeatherService-Artifacts\*"
-          $destination = "C:\inetpub\wwwroot\WeatherAPI"  # Adjust the destination directory
-          Copy-Item -Path $source -Destination $destination -Recurse -Force
-
-      - name: Restart IIS
-        shell: pwsh
-        run: |
-          Restart-Service -Name W3SVC -Force
+          server: ${{ env.FTP_SERVER }}
+          username: ${{ secrets.ftp_username }}
+          password: ${{ secrets.ftp_password }}
