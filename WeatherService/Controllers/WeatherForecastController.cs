@@ -29,7 +29,7 @@ namespace WeatherService.Controllers
             _logger.LogDebug("Search Weather by City.");
 
             // TODO: Remove this later,
-            return new JsonResult(new { Temp = "Celsius", Low = "10", High = "30" });
+            return new JsonResult(new { Temp = "Celsius", Low = "15", High = "25" });
 
             // integrate with weather service API
             var result = await _weatherForecastHelper.GetWeatherFocastByCity(city);
