@@ -32,9 +32,9 @@ jobs:
         run: dotnet publish ${{env.PROJECT_SOLUTION}} --configuration Release --no-build --output ./Release
   
       - name: Push files
-        uses: SamKirkland/FTP-Deploy-Action@4.3.3
+        uses: SamKirkland/FTP-Deploy-Action@v4.3.5
         with:
           server: ${{ env.FTP_SERVER }}
           username: ${{ secrets.ftp_username }}
           password: ${{ secrets.ftp_password }}
-          local-dir: ./Release/
+          #local-dir: ./Release/
