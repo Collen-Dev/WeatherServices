@@ -5,6 +5,7 @@ on:
       - main
       
 env:
+    TIME_OUT: 60000
     FTP_SERVER: ''
     DOTNET_VERSION: '7.0.x'
     PROJECT_SOLUTION: './WeatherService/WeatherService.sln'
@@ -17,19 +18,19 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
       
-      - name: Setup .Net (Prerequisites)
-        uses: actions/setup-dotnet@v3
-        with: 
-          dotnet-version: ${{env.DOTNET_VERSION}}
+      # - name: Setup .Net (Prerequisites)
+      #   uses: actions/setup-dotnet@v3
+      #   with: 
+      #     dotnet-version: ${{env.DOTNET_VERSION}}
       
-      - name: Restore 
-        run: dotnet restore ${{env.PROJECT_SOLUTION}}
+      # - name: Restore 
+      #   run: dotnet restore ${{env.PROJECT_SOLUTION}}
 
-      - name: Build solution
-        run: dotnet build ${{env.PROJECT_SOLUTION}} --configuration Release --no-restore
+      # - name: Build solution
+      #   run: dotnet build ${{env.PROJECT_SOLUTION}} --configuration Release --no-restore
 
-      - name: Publish Artifact
-        run: dotnet publish ${{env.PROJECT_SOLUTION}} --configuration Release --no-build --output ./Release
+      # - name: Publish Artifact
+      #   run: dotnet publish ${{env.PROJECT_SOLUTION}} --configuration Release --no-build --output ./Release
   
       - name: Push files
         uses: SamKirkland/FTP-Deploy-Action@v4.3.5
@@ -38,4 +39,5 @@ jobs:
           username: ${{ secrets.ftp_username }}
           password: ${{ secrets.ftp_password }}
           port: ${{ secrets.ftp_port }}
-          #local-dir: ./Release/
+          timeout: ${{ env.TIME_OUT }}
+          local-dir: ./Release/
