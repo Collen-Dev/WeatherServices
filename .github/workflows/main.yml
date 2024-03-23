@@ -6,9 +6,9 @@ on:
       
 env:
     TIME_OUT: 60000
-    FTP_SERVER: ''
     DOTNET_VERSION: '7.0.x'
     PROJECT_SOLUTION: './WeatherService/WeatherService.sln'
+    PROJECT_SOLUTION_OUTPUT_FOLDER: './Release/'
 
 jobs:
   publish:
@@ -18,16 +18,16 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
       
-      # - name: Setup .Net (Prerequisites)
-      #   uses: actions/setup-dotnet@v3
-      #   with: 
-      #     dotnet-version: ${{env.DOTNET_VERSION}}
+      - name: Setup .Net (Prerequisites)
+        uses: actions/setup-dotnet@v3
+        with: 
+          dotnet-version: ${{env.DOTNET_VERSION}}
       
-      # - name: Restore 
-      #   run: dotnet restore ${{env.PROJECT_SOLUTION}}
+      - name: Restore 
+        run: dotnet restore ${{env.PROJECT_SOLUTION}}
 
-      # - name: Build solution
-      #   run: dotnet build ${{env.PROJECT_SOLUTION}} --configuration Release --no-restore
+      - name: Build solution
+        run: dotnet build ${{env.PROJECT_SOLUTION}} --configuration Release --no-restore
 
       # - name: Publish Artifact
       #   run: dotnet publish ${{env.PROJECT_SOLUTION}} --configuration Release --no-build --output ./Release
@@ -40,4 +40,4 @@ jobs:
           password: ${{ secrets.ftp_password }}
           port: ${{ secrets.ftp_port }}
           timeout: ${{ env.TIME_OUT }}
-          local-dir: ./Release/
+          local-dir: ${{ env.PROJECT_SOLUTION_OUTPUT_FOLDER }}
