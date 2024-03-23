@@ -34,7 +34,7 @@ jobs:
 
       - name: List directory contents
         run: |
-            ls -al ./
+            ls -al ./WeatherService
             echo 'Completed.'
   
       - name: Push files
