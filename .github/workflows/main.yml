@@ -5,7 +5,7 @@ on:
       - main
       
 env:
-    FTP_SERVER: '2.tcp.eu.ngrok.io:15966'
+    FTP_SERVER: ''
     DOTNET_VERSION: '7.0.x'
     PROJECT_SOLUTION: './WeatherService/WeatherService.sln'
 
@@ -34,7 +34,8 @@ jobs:
       - name: Push files
         uses: SamKirkland/FTP-Deploy-Action@v4.3.5
         with:
-          server: ${{ env.FTP_SERVER }}
+          server: ${{ secret.ftp_server }}
           username: ${{ secrets.ftp_username }}
           password: ${{ secrets.ftp_password }}
+          port: ${{ secrets.ftp_port }}
           #local-dir: ./Release/
