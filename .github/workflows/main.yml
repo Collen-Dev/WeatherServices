@@ -39,6 +39,8 @@ jobs:
             ls -al ./WeatherService/bin
             echo 'bin/Release'
             ls -al ./WeatherService/bin/Release
+            echo 'bin/Release/net6.0'
+            ls -al ./WeatherService/bin/Release/net6.0
             echo 'Completed.'
   
       - name: Push files
