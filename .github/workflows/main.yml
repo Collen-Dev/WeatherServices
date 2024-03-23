@@ -8,7 +8,7 @@ env:
     TIME_OUT: 60000
     DOTNET_VERSION: '7.0.x'
     PROJECT_SOLUTION: './WeatherService/WeatherService.sln'
-    PROJECT_SOLUTION_OUTPUT_FOLDER: 'C:\Users\user\Documents\PERSONAL\PROJECT-SOLUTION-OUTPUT/'
+    PROJECT_SOLUTION_OUTPUT_FOLDER: './WeatherService/bin/Release/net6.0/'
 
 jobs:
   publish:
@@ -29,19 +29,14 @@ jobs:
       - name: Build solution
         run: dotnet build ${{env.PROJECT_SOLUTION}} --configuration Release --no-restore
 
-      - name: Publish Artifact
-        run: dotnet publish ${{env.PROJECT_SOLUTION}} --configuration Release --no-build --output ${{env.PROJECT_SOLUTION_OUTPUT_FOLDER}}
+      # - name: Publish Artifact
+      #   run: dotnet publish ${{env.PROJECT_SOLUTION}} --configuration Release --no-build --output ${{env.PROJECT_SOLUTION_OUTPUT_FOLDER}}
 
       - name: List directory contents
         run: |
-            ls -al ./WeatherService
-            echo 'WeatherService/bin'
-            ls -al ./WeatherService/bin
-            echo 'bin/Release'
-            ls -al ./WeatherService/bin/Release
-            echo 'bin/Release/net6.0'
-            ls -al ./WeatherService/bin/Release/net6.0
-            echo 'Completed.'
+            echo ${{ env.PROJECT_SOLUTION_OUTPUT_FOLDER }}
+            ls -al ${{ env.PROJECT_SOLUTION_OUTPUT_FOLDER }}
+            echo '*** Completed ***'
   
       - name: Push files
         uses: SamKirkland/FTP-Deploy-Action@v4.3.5
@@ -51,5 +46,5 @@ jobs:
           password: ${{ secrets.ftp_password }}
           port: ${{ secrets.ftp_port }}
           timeout: ${{ env.TIME_OUT }}
-          local-dir: './build/'                                  # Adjust as required
-          server-dir: './'                                       # Adjust as required
+          local-dir: ${{ env.PROJECT_SOLUTION_OUTPUT_FOLDER }}                                  # Adjust as required
+          server-dir: './'                                                                      # Adjust as required
