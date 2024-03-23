@@ -35,10 +35,10 @@ jobs:
       - name: List directory contents
         run: |
             ls -al ./WeatherService
-            echo 'bin'
+            echo 'WeatherService/bin'
             ls -al ./WeatherService/bin
-            echo 'Release'
-            ls -al ./WeatherService/Release
+            echo 'bin/Release'
+            ls -al ./WeatherService/bin/Release
             echo 'Completed.'
   
       - name: Push files
