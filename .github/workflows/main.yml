@@ -40,5 +40,5 @@ jobs:
           password: ${{ secrets.ftp_password }}
           port: ${{ secrets.ftp_port }}
           timeout: ${{ env.TIME_OUT }}
-          local-dir: './Debug/'                                  # Adjust as required
+          local-dir: './build'                                  # Adjust as required
           server-dir: './'                                       # Adjust as required
