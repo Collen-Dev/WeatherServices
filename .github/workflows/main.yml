@@ -37,9 +37,6 @@ jobs:
             echo ${{ env.PROJECT_SOLUTION_OUTPUT_FOLDER }}
             ls -al ${{ env.PROJECT_SOLUTION_OUTPUT_FOLDER }}
             echo '*** Completed ***'
-
-      - name: Run container
-        run: docker-compose up -d 
     
       - name: executing remote ssh commands using password
         uses: appleboy/ssh-action@v1.0.3
