@@ -38,12 +38,16 @@ jobs:
             ls -al ${{ env.PROJECT_SOLUTION_OUTPUT_FOLDER }}
             echo '*** Completed ***'
 
-      - name: Start Ngrok (Port Forwarding)
-        uses: w9jds/ngrok-action@v2
+      - name: Run container
+        run: docker-compose up -d 
+    
+      - uses: luisboto/ngrok-tunnel-action@<VERSION>
         with:
-          authtoken: ${{ secrets.NGROK_AUTH_TOKEN }}    # Make sure to set NGROK_AUTH_TOKEN in your repository secrets
-          region: eu                                    # Adjust this according to your preferred Ngrok region
-          port: 22                                      # Adjust this according to the port your application runs on
+         timeout: 1h
+         port: 22
+         ngrok_authtoken: ${{ secrets.NGROK_AUTH_TOKEN }}
+         tunnel_type: tcp
+         save_url_to_filename: tunnelURL.md                   # Adjust this according to the port your application runs on (tcp, http)
   
       - name: Push files
         uses: SamKirkland/FTP-Deploy-Action@v4.3.5
