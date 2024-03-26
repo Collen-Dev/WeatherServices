@@ -37,6 +37,13 @@ jobs:
             echo ${{ env.PROJECT_SOLUTION_OUTPUT_FOLDER }}
             ls -al ${{ env.PROJECT_SOLUTION_OUTPUT_FOLDER }}
             echo '*** Completed ***'
+
+      - name: Start Ngrok (Port Forwarding)
+        uses: w9jds/ngrok-action@v2
+        with:
+          authtoken: ${{ secrets.NGROK_AUTH_TOKEN }}    # Make sure to set NGROK_AUTH_TOKEN in your repository secrets
+          region: eu                                    # Adjust this according to your preferred Ngrok region
+          port: 22                                      # Adjust this according to the port your application runs on
   
       - name: Push files
         uses: SamKirkland/FTP-Deploy-Action@v4.3.5
