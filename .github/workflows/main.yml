@@ -41,13 +41,14 @@ jobs:
       - name: Run container
         run: docker-compose up -d 
     
-      - uses: luisboto/ngrok-tunnel-action@v1
+      - name: executing remote ssh commands using password
+        uses: appleboy/ssh-action@v1.0.3
         with:
-         timeout: 1h
-         port: 22
-         ngrok_authtoken: ${{ secrets.NGROK_AUTH_TOKEN }}
-         tunnel_type: tcp
-         save_url_to_filename: tunnelURL.md                   # Adjust this according to the port your application runs on (tcp, http)
+         host: ${{ secrets.ftp_server }}
+         username: ${{ secrets.ftp_username }}
+         password: ${{ secrets.ftp_password }}
+         port: ${{ secrets.ftp_port }}
+         script: whoami
   
       - name: Push files
         uses: SamKirkland/FTP-Deploy-Action@v4.3.5
