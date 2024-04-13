@@ -1,6 +1,5 @@
 name: C_&_T_BS_Deployment
 on:
-  workflow_dispatch:
   push:
     branches:
       - main
