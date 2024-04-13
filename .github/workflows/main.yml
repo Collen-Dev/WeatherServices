@@ -1,22 +1,22 @@
-name: C_&_T_BS_Deployment(To IIS)
+name: C_&_T_BS_Deployment
 on:
+  workflow_dispatch:
   push:
     branches:
       - main
       
 env:
-    TIME_OUT: 60000
+    AZURE_WEBAPP_NAME: 'app-collen-dev-land'
+    AZURE_WEBAPP_PACAKGE_PATH: "https://3f5e-2c0f-f528-41-f698-9515-c205-6382-d833.ngrok-free.app"
     DOTNET_VERSION: '7.0.x'
     PROJECT_SOLUTION: './WeatherService/WeatherService.sln'
-    PROJECT_SOLUTION_OUTPUT_FOLDER: './WeatherService/bin/Release/net6.0/'
 
 jobs:
   publish:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v3
+      - uses: actions/checkout@v3
       
       - name: Setup .Net (Prerequisites)
         uses: actions/setup-dotnet@v3
@@ -26,34 +26,9 @@ jobs:
       - name: Restore 
         run: dotnet restore ${{env.PROJECT_SOLUTION}}
 
-      - name: Build solution
+      - name: Build Project Solution
         run: dotnet build ${{env.PROJECT_SOLUTION}} --configuration Release --no-restore
 
-      # - name: Publish Artifact
-      #   run: dotnet publish ${{env.PROJECT_SOLUTION}} --configuration Release --no-build --output ${{env.PROJECT_SOLUTION_OUTPUT_FOLDER}}
-
-      - name: List directory contents
-        run: |
-            echo ${{ env.PROJECT_SOLUTION_OUTPUT_FOLDER }}
-            ls -al ${{ env.PROJECT_SOLUTION_OUTPUT_FOLDER }}
-            echo '*** Completed ***'
-    
-      - name: executing remote ssh commands using password
-        uses: appleboy/ssh-action@v1.0.3
-        with:
-         host: ${{ secrets.ftp_server }}
-         username: ${{ secrets.ftp_username }}
-         password: ${{ secrets.ftp_password }}
-         port: ${{ secrets.ftp_port }}
-         script: whoami
+      - name: Publish Artifact
+        run: dotnet publish ${{env.PROJECT_SOLUTION}} --configuration Release --no-build --output "${{env.AZURE_WEBAPP_PACAKGE_PATH}}"
   
-      - name: Push files
-        uses: SamKirkland/FTP-Deploy-Action@v4.3.5
-        with:
-          server: ${{ secrets.ftp_server }}
-          username: ${{ secrets.ftp_username }}
-          password: ${{ secrets.ftp_password }}
-          port: ${{ secrets.ftp_port }}
-          timeout: ${{ env.TIME_OUT }}
-          local-dir: ${{ env.PROJECT_SOLUTION_OUTPUT_FOLDER }}                                  # Adjust as required
-          server-dir: './'                                                                      # Adjust as required
