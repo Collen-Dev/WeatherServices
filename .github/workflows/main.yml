@@ -16,7 +16,7 @@ jobs:
     steps:
       - name: MsDeploy location
         run: |
-          msdeploy -help
+          chmod /home/runner/work/_temp/5a6a25eb-cbd7-4a05-92a4-864c1a903091.sh
               
   deploy:
     runs-on: windows-latest
