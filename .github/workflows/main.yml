@@ -16,7 +16,7 @@ jobs:
     steps:
       - name: MsDeploy location
         run: |
-          ls -al "C:\Users\runneradmin\"
+          ls -al "C:\Users\runneradmin"
               
   deploy:
     runs-on: windows-latest
