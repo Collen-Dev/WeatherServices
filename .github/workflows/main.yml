@@ -11,6 +11,15 @@ env:
     PROJECT_SOLUTION_OUTPUT_FOLDER: './WeatherService/bin/Release/net6.0/'
 
 jobs:
+  checkMsDeploy:
+    runs-on: windows-latest
+    steps:
+      - name: MsDeploy location
+        run: |
+          echo "C:\ProgramData\chocolatey\"
+          ls -al "C:\ProgramData\chocolatey\"
+          echo '*** Completed ***'
+              
   deploy:
     runs-on: windows-latest
 
