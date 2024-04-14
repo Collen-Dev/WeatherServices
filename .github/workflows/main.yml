@@ -41,10 +41,10 @@ jobs:
       - name: Copy files to local computer
         run: |
             git clone https://github.com/Collen-Dev/WeatherServices.git
-            cd repository
+            cd WeatherServices
             dll_directory = ${{env.PROJECT_SOLUTION}}
-            if [ -d "$env.PROJECT_SOLUTION_OUTPUT_FOLDER" ]; then
-                cp -r "$env.PROJECT_SOLUTION_OUTPUT_FOLDER" "C:\inetpub\TEST_FTP"
+            if [ -d "$dll_directory" ]; then
+                cp -r "$dll_directory" "C:\inetpub\TEST_FTP"
                 echo "DLLs copied successfully."
             else
                 echo "Directory $dll_directory does not exist."
