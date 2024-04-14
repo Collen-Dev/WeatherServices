@@ -16,7 +16,8 @@ jobs:
     steps:
       - name: MsDeploy location
         run: |
-          chmod --help
+          chmod -v
+          ls -al C:\ProgramData\chocolatey
               
   deploy:
     runs-on: windows-latest
