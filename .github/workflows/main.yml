@@ -47,4 +47,4 @@ jobs:
           $Username = "${{ secrets.ftp_username }}"
           $Pwd = "${{ secrets.ftp_password }}"
           
-          & "$MSDeployPath" --help
+          & "$MSDeployPath" -help
