@@ -44,7 +44,7 @@ jobs:
         run: |
           $MSDeployPath = "C:\Program Files\IIS\Microsoft Web Deploy V3\msdeploy.exe"
           $DownloadPath = "C:\inetpub\wwwroot\WeatherAPI"
-          $Username = ${{ secrets.ftp_username }}
-          $Password = ${{ secrets.ftp_password }}
+          $Username = "${{ secrets.ftp_username }}"
+          $Password = "${{ secrets.ftp_password }}"
           
           & "$MSDeployPath" -verb:sync -source:contentPath="$DownloadPath" -dest:auto,ComputerName="https://192.168.1.103:8080/MSDeploy.axd?site=WeatherAPI",UserName="$Username",Password="$Password",AuthType="Basic"
