@@ -16,7 +16,7 @@ jobs:
     steps:
       - name: MsDeploy location
         run: |
-          ls -al "C:\ProgramData\chocolatey"
+          ls -al "C:\Users\runneradmin\AppData\Local\Temp\chocolatey\webdeploy\3.6.20210729"
               
   deploy:
     runs-on: windows-latest
