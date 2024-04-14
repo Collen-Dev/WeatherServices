@@ -41,6 +41,6 @@ jobs:
       - name: Copy files to local computer
         run: |
 
-            cp -r ${{ env.PROJECT_SOLUTION_OUTPUT_FOLDER }} "C:/inetpub/TEST_FTP"
+            cp -r ${{ env.PROJECT_SOLUTION_OUTPUT_FOLDER }} "C:\\inetpub\\TEST_FTP"
             echo "DLLs copied successfully."
 
