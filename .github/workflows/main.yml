@@ -43,7 +43,8 @@ jobs:
         
         run: |
           $MSDeployPath = "C:\Program Files\IIS\Microsoft Web Deploy V3\msdeploy.exe"
-          $DownloadPath = "C:\inetpub\wwwroot\WeatherAPI"
+          $UploadPath = "C:\inetpub\wwwroot\WeatherAPI"
+          $DownloadPath = "${{env.PROJECT_SOLUTION_OUTPUT_FOLDER}}"
           $Username = "${{ secrets.ftp_username }}"
           $Pwd = "${{ secrets.ftp_password }}"
           
