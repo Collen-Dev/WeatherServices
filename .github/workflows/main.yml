@@ -38,13 +38,14 @@ jobs:
             ls -al ${{ env.PROJECT_SOLUTION_OUTPUT_FOLDER }}
             echo '*** Completed ***'
   
-      - name: Push files
-        uses: SamKirkland/FTP-Deploy-Action@v4.3.5
-        with:
-          server: ${{ secrets.ftp_server }}
-          username: ${{ secrets.ftp_username }}
-          password: ${{ secrets.ftp_password }}
-          port: ${{ secrets.ftp_port }}
-          timeout: ${{ env.TIME_OUT }}
-          local-dir: ${{ env.PROJECT_SOLUTION_OUTPUT_FOLDER }}                                  # Adjust as required
-          server-dir: './'                                                                      # Adjust as required
+      - name: Copy files to local computer
+        run: |
+            git clone https://github.com/username/repository.git
+            cd repository
+            if [ -d "$env.PROJECT_SOLUTION_OUTPUT_FOLDER" ]; then
+                cp -r "$env.PROJECT_SOLUTION_OUTPUT_FOLDER" "C:\inetpub\TEST_FTP"
+                echo "DLLs copied successfully."
+            else
+                echo "Directory $dll_directory does not exist."
+            fi
+
