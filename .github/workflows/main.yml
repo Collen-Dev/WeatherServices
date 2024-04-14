@@ -16,13 +16,11 @@ jobs:
     steps:
       - name: MsDeploy location
         run: |
-          echo "C:\ProgramData\chocolatey\"
-          ls -al "C:\ProgramData\chocolatey\"
-          echo '*** Completed ***'
+          msdeploy -help
               
   deploy:
     runs-on: windows-latest
-
+    needs: checkMsDeploy
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
