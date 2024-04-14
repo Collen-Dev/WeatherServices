@@ -21,7 +21,7 @@ jobs:
         run: |
           # Add your build commands here if needed
           # For example, if your website is .NET-based:
-             dotnet publish ${{env.PROJECT_SOLUTION}} --configuration Release --no-build --output ${{env.PROJECT_SOLUTION_OUTPUT_FOLDER}}
+             dotnet publish ${{env.PROJECT_SOLUTION}} --configuration Release --output ${{env.PROJECT_SOLUTION_OUTPUT_FOLDER}} --verbosity n
 
       - name: Deploy to Local IIS
         env:
