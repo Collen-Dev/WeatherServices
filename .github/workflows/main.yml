@@ -47,4 +47,6 @@ jobs:
           $Username = "${{ secrets.ftp_username }}"
           $Pwd = "${{ secrets.ftp_password }}"
           
-          & "$MSDeployPath" -verb:sync -source:contentPath="$DownloadPath" -dest:auto,ComputerName="https://192.168.1.103:8080/MSDeploy.axd?site=WeatherAPI",UserName=$Username,Password=$Pwd,AuthType="Basic"
+          & "$MSDeployPath" 
+          -verb:sync -source:contentPath="$DownloadPath" 
+          -dest:auto,ComputerName="https://192.168.1.103:8080/MSDeploy.axd?site=WeatherAPI",UserName=$Username,Password=$Pwd,AuthType="Basic"
