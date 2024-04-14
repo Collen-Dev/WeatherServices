@@ -40,5 +40,11 @@ jobs:
           SERVER: "192.168.1.103:8080" # Change to your server name or IP
           USERNAME: ${{ secrets.ftp_username }} # Change to your Windows username
           PASSWORD: ${{ secrets.ftp_password }} # Set this secret in your repository's settings
+        
         run: |
-          & "C:\Program Files\IIS\Microsoft Web Deploy V3\msdeploy.exe" -verb:sync -source:contentPath="C:\inetpub\wwwroot\WeatherAPI" -dest:auto,ComputerName="https://192.168.1.103:8080/MSDeploy.axd?site=WeatherAPI",UserName="${{ secrets.ftp_username }}",Password="${{ secrets.ftp_password }}",AuthType="Basic"
+          $MSDeployPath = "C:\Program Files\IIS\Microsoft Web Deploy V3\msdeploy.exe"
+          $DownloadPath = "C:\inetpub\wwwroot\WeatherAPI"
+          $Username = ${{ secrets.ftp_username }}
+          $Password = ${{ secrets.ftp_password }}
+          
+          & "$MSDeployPath" -verb:sync -source:contentPath="$DownloadPath" -dest:auto,ComputerName="https://192.168.1.103:8080/MSDeploy.axd?site=WeatherAPI",UserName="$Username",Password="$Password",AuthType="Basic"
