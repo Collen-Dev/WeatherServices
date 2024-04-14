@@ -42,8 +42,8 @@ jobs:
         run: |
             git clone https://github.com/Collen-Dev/WeatherServices.git
             cd WeatherServices
-            if [ -d "./WeatherService/bin/Release/net6.0" ]; then
-                cp -r "./WeatherService/bin/Release/net6.0" "C:\inetpub\TEST_FTP"
+            if [ -d "C:\Users\CT_DEV\WeatherServices\WeatherService\bin\Debug\net6.0" ]; then
+                cp -r "C:\Users\CT_DEV\WeatherServices\WeatherService\bin\Debug\net6.0" "C:\inetpub\TEST_FTP"
                 echo "DLLs copied successfully."
             else
                 echo "Directory ${{env.PROJECT_SOLUTION_OUTPUT_FOLDER}} does not exist."
