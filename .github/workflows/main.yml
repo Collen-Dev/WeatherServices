@@ -43,10 +43,10 @@ jobs:
             git clone https://github.com/Collen-Dev/WeatherServices.git
             cd WeatherServices
             dll_directory = ${{env.PROJECT_SOLUTION}}
-            if [ -d "$dll_directory" ]; then
-                cp -r "$dll_directory" "C:\inetpub\TEST_FTP"
+            if [ -d "${{env.PROJECT_SOLUTION}}" ]; then
+                cp -r "${{env.PROJECT_SOLUTION}}" "C:\inetpub\TEST_FTP"
                 echo "DLLs copied successfully."
             else
-                echo "Directory $dll_directory does not exist."
+                echo "Directory ${{env.PROJECT_SOLUTION}} does not exist."
             fi
 
