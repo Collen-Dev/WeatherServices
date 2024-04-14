@@ -4,6 +4,11 @@ on:
   push:
     branches:
       - main
+env:
+    TIME_OUT: 60000
+    DOTNET_VERSION: '7.0.x'
+    PROJECT_SOLUTION: './WeatherService/WeatherService.sln'
+    PROJECT_SOLUTION_OUTPUT_FOLDER: './WeatherService/bin/Release/net6.0/'
 
 jobs:
   deploy:
