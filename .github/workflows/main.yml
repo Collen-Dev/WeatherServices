@@ -40,8 +40,6 @@ jobs:
   
       - name: Copy files to local computer
         run: |
-            git clone https://github.com/Collen-Dev/WeatherServices.git
-            cd WeatherServices
 
             cp -r ${{ env.PROJECT_SOLUTION_OUTPUT_FOLDER }} "C:\inetpub\TEST_FTP"
             echo "DLLs copied successfully."
