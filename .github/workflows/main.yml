@@ -16,7 +16,7 @@ jobs:
     steps:
       - name: MsDeploy location
         run: |
-          ls -al "C:\Users\runneradmin"
+          echo "Check MS deploy completed."
               
   deploy:
     runs-on: windows-latest
