@@ -35,17 +35,17 @@ jobs:
           # For example, if your website is .NET-based:
              dotnet publish ${{env.PROJECT_SOLUTION}} --configuration Release --output ${{env.PROJECT_SOLUTION_OUTPUT_FOLDER}} --verbosity n
 
-      - name: Deploy to Local IIS
-        env:
-          SERVER: "192.168.1.103:8080" # Change to your server name or IP
-          USERNAME: ${{ secrets.ftp_username }} # Change to your Windows username
-          PASSWORD: ${{ secrets.ftp_password }} # Set this secret in your repository's settings
+      # - name: Deploy to Local IIS
+      #   env:
+      #     SERVER: "192.168.1.103:8080" # Change to your server name or IP
+      #     USERNAME: ${{ secrets.ftp_username }} # Change to your Windows username
+      #     PASSWORD: ${{ secrets.ftp_password }} # Set this secret in your repository's settings
         
-        run: |
-          $MSDeployPath = "C:\Program Files\IIS\Microsoft Web Deploy V3\msdeploy.exe"
-          $UploadPath = "C:\inetpub\wwwroot\WeatherAPI"
-          $DownloadPath = "${{env.PROJECT_SOLUTION_OUTPUT_FOLDER}}"
-          $Username = "${{ secrets.ftp_username }}"
-          $Pwd = "${{ secrets.ftp_password }}"
+      #   run: |
+      #     $MSDeployPath = "C:\Program Files\IIS\Microsoft Web Deploy V3\msdeploy.exe"
+      #     $UploadPath = "C:\inetpub\wwwroot\WeatherAPI"
+      #     $DownloadPath = "${{env.PROJECT_SOLUTION_OUTPUT_FOLDER}}"
+      #     $Username = "${{ secrets.ftp_username }}"
+      #     $Pwd = "${{ secrets.ftp_password }}"
           
-          & "$MSDeployPath" -verb:sync -source:contentPath=$DownloadPath -dest:contentPath=$UploadPath,computerName="https://192.168.1.103:8080/MSDeploy.axd?site=WeatherAPI",userName=$Username,password=$Pwd,authtype="Basic",includeAcls="False" -allowUntrusted -disableLink:AppPoolExtension -disableLink:ContentExtension -disableLink:CertificateExtension -verbose
+      #     & "$MSDeployPath" -verb:sync -source:contentPath=$DownloadPath -dest:contentPath=$UploadPath,computerName="https://192.168.1.103:8080/MSDeploy.axd?site=WeatherAPI",userName=$Username,password=$Pwd,authtype="Basic",includeAcls="False" -allowUntrusted -disableLink:AppPoolExtension -disableLink:ContentExtension -disableLink:CertificateExtension -verbose
