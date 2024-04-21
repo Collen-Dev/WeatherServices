@@ -30,7 +30,7 @@ namespace WeatherService.Services
 
         private async Task<string> GetWatherApiKey()
         {
-            return await _azureSecretProvider.GetSecretAsync(ConstantValues.KV_C_AND_T);
+            return "97dcfcf6f5414088b62191231230610"; // await _azureSecretProvider.GetSecretAsync(ConstantValues.KV_C_AND_T);
         }
     }
 }
